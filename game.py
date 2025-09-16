@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import modules
+import random as rand
 pg.init()
 screen = pg.display.set_mode((1280,720))
 clock = pg.time.Clock()
@@ -14,6 +15,9 @@ def Game():
 	Bullet = pg.image.load("assets/images/PNG FILES/bullet.png")
 	Player = modules.sprite.Sprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580])
 	running = True
+	stargroup = modules.particle.StarGroup()
+	starspawn = rand.randint(1,100)
+	print(stargroup.lifetime)
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
@@ -21,6 +25,10 @@ def Game():
 				pg.quit()
 				sys.exit()
 		keys = pg.key.get_pressed()
+		if (starspawn <= 0):
+			stargroup.createGroupParticle(minspeed=0.01,maxspeed=1)
+			starspawn = rand.randint(1,100)
+		stargroup.updateall(screen)
 		if (keys[pg.K_LEFT]):
 			Player.current_frame = 2
 			Player.coordinates[0] -= Player.speed
@@ -40,6 +48,7 @@ def Game():
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
 		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
+		starspawn -= 1
 		pg.display.flip()
 		clock.tick()
 def init():
