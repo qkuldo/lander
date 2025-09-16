@@ -14,13 +14,13 @@ class Sprite:
 		self.rect.y = coordinates[1]
 		self.coordinates = coordinates
 	def update(self):
-		if (self.rect.left < 0):
+		if (self.rect.left < 220):
 			self.coordinates[0] += 5
-		if (self.rect.right > 1280):
+		if (self.rect.right > 1060):
 			self.coordinates[0] -= 5
 		if (self.rect.top < 0):
 			self.coordinates[1] += 5
-		if (self.rect.bottom > 720):
+		if (self.rect.bottom > 580):
 			self.coordinates[1] -= 5
 		self.rect.x = self.coordinates[0]
 		self.rect.y = self.coordinates[1]

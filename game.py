@@ -34,6 +34,9 @@ def Game():
 			Player.coordinates[1] += Player.speed
 		Player.update()
 		Player.draw(screen)
+		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
+		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
+		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
 		pg.display.flip()
 		clock.tick()
 def init():
