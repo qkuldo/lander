@@ -14,6 +14,8 @@ class Sprite:
 		self.rect.y = coordinates[1]
 		self.coordinates = coordinates
 	def update(self):
+		self.rect.x = self.coordinates[0]
+		self.rect.y = self.coordinates[1]
 		if (self.rect.left < 220):
 			self.coordinates[0] += 5
 		if (self.rect.right > 1060):
@@ -22,11 +24,9 @@ class Sprite:
 			self.coordinates[1] += 5
 		if (self.rect.bottom > 580):
 			self.coordinates[1] -= 5
-		self.rect.x = self.coordinates[0]
-		self.rect.y = self.coordinates[1]
-	def draw(self,screen):
+	def draw(self,screen,rotation=0):
 		if (self.frame_number == 1):
-			screen.blit(self.spritesheet,self.rect)
+			screen.blit(pg.transform.rotate(self.spritesheet,rotation),self.rect)
 		else:
 			frame = pg.transform.scale(self.spritesheet.load_frame(self.current_frame), (self.width,self.height))
-			screen.blit(frame,self.rect)
+			screen.blit(pg.transform.rotate(frame,rotation),self.rect)
