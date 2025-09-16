@@ -12,8 +12,18 @@ class Sprite:
 		self.rect = pg.Rect((0,0),(self.width,self.height))
 		self.rect.x = coordinates[0]
 		self.rect.y = coordinates[1]
+		self.coordinates = coordinates
 	def update(self):
-		pass
+		if (self.rect.left < 0):
+			self.coordinates[0] += 5
+		if (self.rect.right > 1280):
+			self.coordinates[0] -= 5
+		if (self.rect.top < 0):
+			self.coordinates[1] += 5
+		if (self.rect.bottom > 720):
+			self.coordinates[1] -= 5
+		self.rect.x = self.coordinates[0]
+		self.rect.y = self.coordinates[1]
 	def draw(self,screen):
 		if (self.frame_number == 1):
 			screen.blit(self.spritesheet,self.rect)
