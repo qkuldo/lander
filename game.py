@@ -12,11 +12,13 @@ current_scene = GAMESCENE
 def Game():
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
 	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,24,24)
-	Bullet = pg.image.load("assets/images/PNG FILES/bullet.png")
+	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	Player = modules.sprite.Sprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580])
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,100)
+	player_bulletlist = []
+	player_cooldown = 0
 	print(stargroup.lifetime)
 	while running:
 		screen.fill("black")
@@ -44,11 +46,21 @@ def Game():
 			Player.coordinates[1] -= Player.speed
 		elif (keys[pg.K_DOWN]):
 			Player.coordinates[1] += Player.speed
+		if (keys[pg.K_SPACE] and player_cooldown <= 0):
+			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
+			player_cooldown = 200
+		for bullet in player_bulletlist:
+			dead = bullet.update()
+			if (dead):
+				player_bulletlist.remove(bullet)
+			else:
+				bullet.draw(screen)
 		Player.update()
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
 		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
 		starspawn -= 1
+		player_cooldown -= 1
 		pg.display.flip()
 		clock.tick()
 def init():
