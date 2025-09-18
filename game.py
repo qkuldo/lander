@@ -19,7 +19,6 @@ def Game():
 	starspawn = rand.randint(1,100)
 	player_bulletlist = []
 	player_cooldown = 0
-	print(stargroup.lifetime)
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
