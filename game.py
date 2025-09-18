@@ -19,6 +19,8 @@ def Game():
 	starspawn = rand.randint(1,100)
 	player_bulletlist = []
 	player_cooldown = 0
+	scroll_speed = 0
+	speed_up_timer = 0
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
@@ -45,20 +47,51 @@ def Game():
 			else:
 				bullet.draw(screen)
 		if (keys[pg.K_LEFT]):
-			Player.current_frame = 2
+			if (scroll_speed == 0):
+				Player.current_frame = 2
+			elif (scroll_speed == 1):
+				Player.current_frame = 5
+			elif (scroll_speed == 2):
+				Player.current_frame = 8
+			elif (scroll_speed == 3):
+				Player.current_frame = 11
 			Player.coordinates[0] -= Player.speed
 			Player.draw(screen,rotation=5)
 		if (keys[pg.K_RIGHT]):
-			Player.current_frame = 1
+			if (scroll_speed == 0):
+				Player.current_frame = 1
+			elif (scroll_speed == 1):
+				Player.current_frame = 4
+			elif (scroll_speed == 2):
+				Player.current_frame = 7
+			elif (scroll_speed == 3):
+				Player.current_frame = 10
 			Player.coordinates[0] += Player.speed
 			Player.draw(screen,rotation=-5)
 		if (not (keys[pg.K_RIGHT] or keys[pg.K_LEFT])):
-			Player.current_frame = 0
+			if (scroll_speed == 0):
+				Player.current_frame = 0
+			elif (scroll_speed == 1):
+				Player.current_frame = 3
+			elif (scroll_speed == 2):
+				Player.current_frame = 6
+			elif (scroll_speed == 3):
+				Player.current_frame = 9
 			Player.draw(screen)
 		if (keys[pg.K_UP]):
 			Player.coordinates[1] -= Player.speed
 		elif (keys[pg.K_DOWN]):
 			Player.coordinates[1] += Player.speed
+		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
+			speed_up_timer -= 0.001
+		if (speed_up_timer <= 0):
+			if (scroll_speed == 0):
+				speed_up_timer = 2
+			elif (scroll_speed == 1):
+				speed_up_timer = 4
+			elif (scroll_speed == 2):
+				speed_up_timer = 6
+			scroll_speed += 1
 		Player.update()
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
