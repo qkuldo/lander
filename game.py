@@ -35,9 +35,9 @@ def Game():
 			if (Player.current_frame == 0):
 				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
 			elif (Player.current_frame == 1):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[1,-1],rotation=-5))
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0.6,-1],rotation=-5))
 			elif (Player.current_frame == 2):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-1,-1],rotation=5))
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-0.6,-1],rotation=5))
 			player_cooldown = 200
 		for bullet in player_bulletlist:
 			dead = bullet.update()
