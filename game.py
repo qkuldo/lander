@@ -31,23 +31,13 @@ def Game():
 			stargroup.createGroupParticle(minspeed=0.01,maxspeed=1)
 			starspawn = rand.randint(1,100)
 		stargroup.updateall(screen)
-		if (keys[pg.K_LEFT]):
-			Player.current_frame = 2
-			Player.coordinates[0] -= Player.speed
-			Player.draw(screen,rotation=15)
-		if (keys[pg.K_RIGHT]):
-			Player.current_frame = 1
-			Player.coordinates[0] += Player.speed
-			Player.draw(screen,rotation=-15)
-		if (not (keys[pg.K_RIGHT] or keys[pg.K_LEFT])):
-			Player.current_frame = 0
-			Player.draw(screen)
-		if (keys[pg.K_UP]):
-			Player.coordinates[1] -= Player.speed
-		elif (keys[pg.K_DOWN]):
-			Player.coordinates[1] += Player.speed
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
+			if (Player.current_frame == 0):
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
+			elif (Player.current_frame == 1):
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[1,-1],rotation=-5))
+			elif (Player.current_frame == 2):
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-1,-1],rotation=5))
 			player_cooldown = 200
 		for bullet in player_bulletlist:
 			dead = bullet.update()
@@ -55,6 +45,21 @@ def Game():
 				player_bulletlist.remove(bullet)
 			else:
 				bullet.draw(screen)
+		if (keys[pg.K_LEFT]):
+			Player.current_frame = 2
+			Player.coordinates[0] -= Player.speed
+			Player.draw(screen,rotation=5)
+		if (keys[pg.K_RIGHT]):
+			Player.current_frame = 1
+			Player.coordinates[0] += Player.speed
+			Player.draw(screen,rotation=-5)
+		if (not (keys[pg.K_RIGHT] or keys[pg.K_LEFT])):
+			Player.current_frame = 0
+			Player.draw(screen)
+		if (keys[pg.K_UP]):
+			Player.coordinates[1] -= Player.speed
+		elif (keys[pg.K_DOWN]):
+			Player.coordinates[1] += Player.speed
 		Player.update()
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
