@@ -20,7 +20,7 @@ def Game():
 	player_bulletlist = []
 	player_cooldown = 0
 	scroll_speed = 0
-	speed_up_timer = 0
+	speed_up_timer = 2
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
@@ -33,11 +33,11 @@ def Game():
 			starspawn = rand.randint(1,100)
 		stargroup.updateall(screen)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			if (Player.current_frame == 0):
+			if (Player.current_frame in [0,3,6,9]):
 				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
-			elif (Player.current_frame == 1):
+			elif (Player.current_frame in [1,4,7,10]):
 				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0.6,-1],rotation=-5))
-			elif (Player.current_frame == 2):
+			elif (Player.current_frame in [2,5,8,11]):
 				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-0.6,-1],rotation=5))
 			player_cooldown = 200
 		for bullet in player_bulletlist:
@@ -86,7 +86,7 @@ def Game():
 			speed_up_timer -= 0.001
 		if (speed_up_timer <= 0):
 			if (scroll_speed == 0):
-				speed_up_timer = 2
+				speed_up_timer = 3
 			elif (scroll_speed == 1):
 				speed_up_timer = 4
 			elif (scroll_speed == 2):
