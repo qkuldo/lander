@@ -13,7 +13,7 @@ def Game():
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
 	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,24,24)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
-	Player = modules.sprite.Sprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580])
+	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,100)
@@ -21,6 +21,7 @@ def Game():
 	player_cooldown = 0
 	scroll_speed = 0
 	speed_up_timer = 2
+	player_hp_rect = pg.Rect((200,380),(15,Player.hp*10))
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
@@ -41,11 +42,11 @@ def Game():
 		stargroup.updateall(screen)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
 			if (Player.current_frame in [0,3,6,9]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1]))
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack))
 			elif (Player.current_frame in [1,4,7,10]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0.6,-1],rotation=-5))
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0.6,-1],rotation=-5,attack=Player.attack))
 			elif (Player.current_frame in [2,5,8,11]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-0.6,-1],rotation=5))
+				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-0.6,-1],rotation=5,attack=Player.attack))
 			player_cooldown = 200
 		for bullet in player_bulletlist:
 			dead = bullet.update()
@@ -103,6 +104,7 @@ def Game():
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
 		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
+		pg.draw.rect(screen,(230,104,78),player_hp_rect)
 		starspawn -= 1
 		player_cooldown -= 1
 		pg.display.flip()

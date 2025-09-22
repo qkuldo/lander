@@ -34,9 +34,10 @@ class Sprite:
 
 class Projectile(Sprite):
 	"""Sprite child class that handles constanly moving objects"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0,attack=1):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.rotation = rotation
+		self.attack = attack
 	def update(self):
 		self.coordinates[0] += self.speed[0]
 		self.coordinates[1] += self.speed[1]
@@ -52,5 +53,11 @@ class Projectile(Sprite):
 		else:
 			frame = pg.transform.scale(self.spritesheet.load_frame(self.current_frame), (self.width,self.height))
 			screen.blit(pg.transform.rotate(frame,self.rotation),self.rect)
+class SpecialSprite(Sprite):
+	"""Sprite child class that has more attributes attached"""
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=0.5,hp=1,attack=1):
+		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
+		self.hp = hp
+		self.attack = attack
 
 		
