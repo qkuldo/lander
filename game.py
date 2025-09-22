@@ -29,7 +29,14 @@ def Game():
 				sys.exit()
 		keys = pg.key.get_pressed()
 		if (starspawn <= 0):
-			stargroup.createGroupParticle(minspeed=0.01,maxspeed=1)
+			if (scroll_speed == 0):
+				stargroup.createGroupParticle(minspeed=0.01,maxspeed=1)
+			elif (scroll_speed == 1):
+				stargroup.createGroupParticle(minspeed=0.05,maxspeed=1.5)
+			elif (scroll_speed == 2):
+				stargroup.createGroupParticle(minspeed=0.1,maxspeed=2)
+			elif (scroll_speed == 3):
+				stargroup.createGroupParticle(minspeed=0.5,maxspeed=2.5)
 			starspawn = rand.randint(1,100)
 		stargroup.updateall(screen)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
