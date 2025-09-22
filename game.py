@@ -21,7 +21,7 @@ def Game():
 	player_cooldown = 0
 	scroll_speed = 0
 	speed_up_timer = 2
-	player_hp_rect = pg.Rect((200,380),(15,Player.hp*10))
+	player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
