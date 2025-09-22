@@ -54,7 +54,7 @@ def Game():
 				player_bulletlist.remove(bullet)
 			else:
 				bullet.draw(screen)
-		if (keys[pg.K_LEFT]):
+		if (keys[pg.K_LEFT] or keys[pg.K_a]):
 			if (scroll_speed == 0):
 				Player.current_frame = 2
 			elif (scroll_speed == 1):
@@ -65,7 +65,7 @@ def Game():
 				Player.current_frame = 11
 			Player.coordinates[0] -= Player.speed
 			Player.draw(screen,rotation=5)
-		if (keys[pg.K_RIGHT]):
+		if (keys[pg.K_RIGHT] or keys[pg.K_d]):
 			if (scroll_speed == 0):
 				Player.current_frame = 1
 			elif (scroll_speed == 1):
@@ -76,7 +76,7 @@ def Game():
 				Player.current_frame = 10
 			Player.coordinates[0] += Player.speed
 			Player.draw(screen,rotation=-5)
-		if (not (keys[pg.K_RIGHT] or keys[pg.K_LEFT])):
+		if (not ((keys[pg.K_RIGHT] or keys[pg.K_d]) or (keys[pg.K_LEFT] or keys[pg.K_a]))):
 			if (scroll_speed == 0):
 				Player.current_frame = 0
 			elif (scroll_speed == 1):
@@ -86,9 +86,9 @@ def Game():
 			elif (scroll_speed == 3):
 				Player.current_frame = 9
 			Player.draw(screen)
-		if (keys[pg.K_UP]):
+		if (keys[pg.K_UP] or keys[pg.K_w]):
 			Player.coordinates[1] -= Player.speed
-		elif (keys[pg.K_DOWN]):
+		elif (keys[pg.K_DOWN] or keys[pg.K_s]):
 			Player.coordinates[1] += Player.speed
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
 			speed_up_timer -= 0.001
