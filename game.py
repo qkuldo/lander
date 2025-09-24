@@ -108,7 +108,7 @@ def Game():
 		starspawn -= 1
 		player_cooldown -= 1
 		pg.display.flip()
-		clock.tick()
+		clock.tick(60)
 def init():
 	Game()
 
