@@ -41,12 +41,7 @@ def Game():
 			starspawn = rand.randint(1,100)
 		stargroup.updateall(screen)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			if (Player.current_frame in [0,3,6,9]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack))
-			elif (Player.current_frame in [1,4,7,10]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0.6,-1],rotation=-5,attack=Player.attack))
-			elif (Player.current_frame in [2,5,8,11]):
-				player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[-0.6,-1],rotation=5,attack=Player.attack))
+			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack)
 			player_cooldown = 200
 		for bullet in player_bulletlist:
 			dead = bullet.update()
