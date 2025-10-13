@@ -62,7 +62,7 @@ def Game():
 				Player.current_frame = 11
 			Player.coordinates[0] -= Player.speed
 			Player.draw(screen,rotation=5)
-		if (keys[pg.K_RIGHT] or keys[pg.K_d]):
+		elif (keys[pg.K_RIGHT] or keys[pg.K_d]):
 			if (scroll_speed == 0):
 				Player.current_frame = 1
 			elif (scroll_speed == 1):
