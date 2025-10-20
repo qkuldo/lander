@@ -41,7 +41,6 @@ def Game():
 				stargroup.createGroupParticle(minspeed=0.5,maxspeed=2.5)
 			starspawn = rand.randint(1,100)
 		pg.draw.rect(screen,(16,4,17),game_bg)
-		stargroup.updateall(screen)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
 			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack))
 			player_cooldown = 200
@@ -98,6 +97,7 @@ def Game():
 				speed_up_timer = 6
 			scroll_speed += 1
 		Player.update()
+		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
 		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
