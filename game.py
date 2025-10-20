@@ -53,24 +53,30 @@ def Game():
 		if (keys[pg.K_LEFT] or keys[pg.K_a]):
 			if (scroll_speed == 0):
 				Player.current_frame = 2
+				Player.coordinates[0] -= Player.speed
 			elif (scroll_speed == 1):
 				Player.current_frame = 5
+				Player.coordinates[0] -= Player.speed*1.2
 			elif (scroll_speed == 2):
 				Player.current_frame = 8
+				Player.coordinates[0] -= Player.speed*1.4
 			elif (scroll_speed == 3):
 				Player.current_frame = 11
-			Player.coordinates[0] -= Player.speed
+				Player.coordinates[0] -= Player.speed*1.6
 			Player.draw(screen,rotation=5)
 		elif (keys[pg.K_RIGHT] or keys[pg.K_d]):
 			if (scroll_speed == 0):
 				Player.current_frame = 1
+				Player.coordinates[0] += Player.speed
 			elif (scroll_speed == 1):
 				Player.current_frame = 4
+				Player.coordinates[0] += Player.speed*1.2
 			elif (scroll_speed == 2):
 				Player.current_frame = 7
+				Player.coordinates[0] += Player.speed*1.4
 			elif (scroll_speed == 3):
 				Player.current_frame = 10
-			Player.coordinates[0] += Player.speed
+				Player.coordinates[0] += Player.speed*1.6
 			Player.draw(screen,rotation=-5)
 		if (not ((keys[pg.K_RIGHT] or keys[pg.K_d]) or (keys[pg.K_LEFT] or keys[pg.K_a]))):
 			if (scroll_speed == 0):
@@ -83,9 +89,23 @@ def Game():
 				Player.current_frame = 9
 			Player.draw(screen)
 		if (keys[pg.K_UP] or keys[pg.K_w]):
-			Player.coordinates[1] -= Player.speed
+			if (scroll_speed == 0):
+				Player.coordinates[1] -= Player.speed
+			elif (scroll_speed == 1):
+				Player.coordinates[1] -= Player.speed*1.2
+			elif (scroll_speed == 2):
+				Player.coordinates[1] -= Player.speed*1.4
+			elif (scroll_speed == 3):
+				Player.coordinates[1] -= Player.speed*1.6
 		elif (keys[pg.K_DOWN] or keys[pg.K_s]):
-			Player.coordinates[1] += Player.speed
+			if (scroll_speed == 0):
+				Player.coordinates[1] += Player.speed
+			elif (scroll_speed == 1):
+				Player.coordinates[1] += Player.speed*1.2
+			elif (scroll_speed == 2):
+				Player.coordinates[1] += Player.speed*1.4
+			elif (scroll_speed == 3):
+				Player.coordinates[1] += Player.speed*1.6
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
 			speed_up_timer -= 0.001
 		if (speed_up_timer <= 0):
