@@ -3,6 +3,7 @@ import sys
 import modules
 import random as rand
 pg.init()
+pg.mixer.init()
 screen = pg.display.set_mode((1280,720))
 clock = pg.time.Clock()
 TITLESCENE = 0
@@ -23,6 +24,7 @@ def Game():
 	speed_up_timer = 2
 	player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 	game_bg = pg.Rect((220,0),(840,580))
+	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
 	while running:
 		screen.fill("black")
 		for event in pg.event.get():
@@ -44,6 +46,7 @@ def Game():
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
 			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack))
 			player_cooldown = 200
+			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
 			dead = bullet.update()
 			if (dead):
