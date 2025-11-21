@@ -12,7 +12,7 @@ current_scene = GAMESCENE
 
 def Game():
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
-	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,24,24)
+	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,22)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
