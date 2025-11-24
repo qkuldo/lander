@@ -55,7 +55,7 @@ class Projectile(Sprite):
 			screen.blit(pg.transform.rotate(frame,self.rotation),self.rect)
 class SpecialSprite(Sprite):
 	"""Sprite child class that has more attributes attached"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=0.5,hp=1,attack=1):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=4.5,hp=1,attack=1):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.hp = hp
 		self.attack = attack

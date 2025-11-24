@@ -9,7 +9,6 @@ clock = pg.time.Clock()
 TITLESCENE = 0
 GAMESCENE = 1
 current_scene = GAMESCENE
-
 def Game():
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
 	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,22)
@@ -17,11 +16,11 @@ def Game():
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
 	stargroup = modules.particle.StarGroup()
-	starspawn = rand.randint(1,100)
+	starspawn = rand.randint(1,30)
 	player_bulletlist = []
 	player_cooldown = 0
 	scroll_speed = 0
-	speed_up_timer = 2
+	speed_up_timer = 30
 	player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 	game_bg = pg.Rect((220,0),(840,580))
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
@@ -34,18 +33,18 @@ def Game():
 		keys = pg.key.get_pressed()
 		if (starspawn <= 0):
 			if (scroll_speed == 0):
-				stargroup.createGroupParticle(minspeed=0.01,maxspeed=1)
+				stargroup.createGroupParticle(minspeed=0.1,maxspeed=5)
 			elif (scroll_speed == 1):
-				stargroup.createGroupParticle(minspeed=0.05,maxspeed=1.5)
+				stargroup.createGroupParticle(minspeed=0.5,maxspeed=7)
 			elif (scroll_speed == 2):
-				stargroup.createGroupParticle(minspeed=0.1,maxspeed=2)
+				stargroup.createGroupParticle(minspeed=1,maxspeed=10)
 			elif (scroll_speed == 3):
-				stargroup.createGroupParticle(minspeed=0.5,maxspeed=2.5)
-			starspawn = rand.randint(1,100)
+				stargroup.createGroupParticle(minspeed=5,maxspeed=12)
+			starspawn = rand.randint(1,30)
 		pg.draw.rect(screen,(16,4,17),game_bg)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-1],attack=Player.attack))
-			player_cooldown = 200
+			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
+			player_cooldown = 30
 			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
 			dead = bullet.update()
@@ -110,14 +109,14 @@ def Game():
 			elif (scroll_speed == 3):
 				Player.coordinates[1] += Player.speed*1.6
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
-			speed_up_timer -= 0.001
+			speed_up_timer -= 0.1
 		if (speed_up_timer <= 0):
 			if (scroll_speed == 0):
-				speed_up_timer = 3
+				speed_up_timer = 60
 			elif (scroll_speed == 1):
-				speed_up_timer = 4
+				speed_up_timer = 70
 			elif (scroll_speed == 2):
-				speed_up_timer = 6
+				speed_up_timer = 80
 			scroll_speed += 1
 		Player.update()
 		stargroup.updateall(screen)
@@ -128,7 +127,7 @@ def Game():
 		starspawn -= 1
 		player_cooldown -= 1
 		pg.display.flip()
-		clock.tick()
+		clock.tick(60)
 def init():
 	Game()
 
