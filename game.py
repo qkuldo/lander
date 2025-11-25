@@ -26,12 +26,14 @@ def Game():
 	game_bg = pg.Rect((220,0),(840,580))
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
 	while running:
+		moved_ltor = False
 		screen.fill("black")
 		for event in pg.event.get():
 			if (event.type == pg.QUIT):
 				pg.quit()
 				sys.exit()
 		keys = pg.key.get_pressed()
+		left_to_right_list = [keys[pg.K_LEFT],keys[pg.K_a],keys[pg.K_RIGHT],keys[pg.K_d]]
 		if (starspawn <= 0):
 			if (scroll_speed == 0):
 				stargroup.createGroupParticle(minspeed=0.1,maxspeed=5)
@@ -53,35 +55,42 @@ def Game():
 				player_bulletlist.remove(bullet)
 			else:
 				bullet.draw(screen)
-		if (keys[pg.K_LEFT] or keys[pg.K_a]):
-			if (scroll_speed == 0):
-				Player.current_frame = 2
-				Player.coordinates[0] -= Player.speed
-			elif (scroll_speed == 1):
-				Player.current_frame = 5
-				Player.coordinates[0] -= Player.speed*1.2
-			elif (scroll_speed == 2):
-				Player.current_frame = 8
-				Player.coordinates[0] -= Player.speed*1.4
-			elif (scroll_speed == 3):
-				Player.current_frame = 11
-				Player.coordinates[0] -= Player.speed*1.6
-			Player.draw(screen,rotation=0)
-		elif (keys[pg.K_RIGHT] or keys[pg.K_d]):
-			if (scroll_speed == 0):
-				Player.current_frame = 1
-				Player.coordinates[0] += Player.speed
-			elif (scroll_speed == 1):
-				Player.current_frame = 4
-				Player.coordinates[0] += Player.speed*1.2
-			elif (scroll_speed == 2):
-				Player.current_frame = 7
-				Player.coordinates[0] += Player.speed*1.4
-			elif (scroll_speed == 3):
-				Player.current_frame = 10
-				Player.coordinates[0] += Player.speed*1.6
-			Player.draw(screen,rotation=0)
-		if (not ((keys[pg.K_RIGHT] or keys[pg.K_d]) or (keys[pg.K_LEFT] or keys[pg.K_a]))):
+		if (True in left_to_right_list):
+			if (not moved_ltor and (keys[pg.K_RIGHT] or keys[pg.K_d])):
+				moved_ltor = True
+				if (scroll_speed == 0):
+					Player.coordinates[0] += Player.speed
+				elif (scroll_speed == 1):
+					Player.coordinates[0] += Player.speed*1.2
+				elif (scroll_speed == 2):
+					Player.coordinates[0] += Player.speed*1.4
+				elif (scroll_speed == 3):
+					Player.coordinates[0] += Player.speed*1.6
+				if (scroll_speed == 0):
+					Player.current_frame = 1
+				elif (scroll_speed == 1):
+					Player.current_frame = 4
+				elif (scroll_speed == 2):
+					Player.current_frame = 7
+				elif (scroll_speed == 3):
+					Player.current_frame = 10
+				Player.draw(screen,rotation=0)
+			if (not moved_ltor and (keys[pg.K_LEFT] or keys[pg.K_a])):
+				moved_ltor = True
+				if (scroll_speed == 0):
+					Player.current_frame = 2
+					Player.coordinates[0] -= Player.speed
+				elif (scroll_speed == 1):
+					Player.current_frame = 5
+					Player.coordinates[0] -= Player.speed*1.2
+				elif (scroll_speed == 2):
+					Player.current_frame = 8
+					Player.coordinates[0] -= Player.speed*1.4
+				elif (scroll_speed == 3):
+					Player.current_frame = 11
+					Player.coordinates[0] -= Player.speed*1.6
+				Player.draw(screen,rotation=0)
+		else:
 			if (scroll_speed == 0):
 				Player.current_frame = 0
 			elif (scroll_speed == 1):
@@ -91,6 +100,7 @@ def Game():
 			elif (scroll_speed == 3):
 				Player.current_frame = 9
 			Player.draw(screen)
+
 		if (keys[pg.K_UP] or keys[pg.K_w]):
 			if (scroll_speed == 0):
 				Player.coordinates[1] -= Player.speed
@@ -100,7 +110,7 @@ def Game():
 				Player.coordinates[1] -= Player.speed*1.4
 			elif (scroll_speed == 3):
 				Player.coordinates[1] -= Player.speed*1.6
-		elif (keys[pg.K_DOWN] or keys[pg.K_s]):
+		if (keys[pg.K_DOWN] or keys[pg.K_s]):
 			if (scroll_speed == 0):
 				Player.coordinates[1] += Player.speed
 			elif (scroll_speed == 1):
@@ -109,6 +119,7 @@ def Game():
 				Player.coordinates[1] += Player.speed*1.4
 			elif (scroll_speed == 3):
 				Player.coordinates[1] += Player.speed*1.6
+
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
 			speed_up_timer -= 0.1
 			if (slowdown_timer < 500):
@@ -123,7 +134,7 @@ def Game():
 			elif (scroll_speed == 2):
 				speed_up_timer = 80
 			scroll_speed += 1
-		if (slowdown_timer <= 0 and scroll_speed >= 0):
+		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
 		stargroup.updateall(screen)
