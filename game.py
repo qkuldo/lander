@@ -10,6 +10,7 @@ TITLESCENE = 0
 GAMESCENE = 1
 current_scene = GAMESCENE
 def Game():
+	slowdown_timer = 500
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
 	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,22)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
@@ -110,6 +111,10 @@ def Game():
 				Player.coordinates[1] += Player.speed*1.6
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
 			speed_up_timer -= 0.1
+			if (slowdown_timer < 500):
+				slowdown_timer += 1
+		else:
+			slowdown_timer -= 1
 		if (speed_up_timer <= 0):
 			if (scroll_speed == 0):
 				speed_up_timer = 60
@@ -118,6 +123,8 @@ def Game():
 			elif (scroll_speed == 2):
 				speed_up_timer = 80
 			scroll_speed += 1
+		if (slowdown_timer <= 0 and scroll_speed >= 0):
+			scroll_speed -= 1
 		Player.update()
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
