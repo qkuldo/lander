@@ -12,7 +12,7 @@ current_scene = GAMESCENE
 def Game():
 	slowdown_timer = 500
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
-	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,22)
+	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,23)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
@@ -67,27 +67,27 @@ def Game():
 				elif (scroll_speed == 3):
 					Player.coordinates[0] += Player.speed*1.6
 				if (scroll_speed == 0):
-					Player.current_frame = 1
+					Player.current_frame = 2
 				elif (scroll_speed == 1):
-					Player.current_frame = 4
+					Player.current_frame = 5
 				elif (scroll_speed == 2):
-					Player.current_frame = 7
+					Player.current_frame = 8
 				elif (scroll_speed == 3):
-					Player.current_frame = 10
+					Player.current_frame = 11
 				Player.draw(screen,rotation=0)
 			if (not moved_ltor and (keys[pg.K_LEFT] or keys[pg.K_a])):
 				moved_ltor = True
 				if (scroll_speed == 0):
-					Player.current_frame = 2
+					Player.current_frame = 1
 					Player.coordinates[0] -= Player.speed
 				elif (scroll_speed == 1):
-					Player.current_frame = 5
+					Player.current_frame = 4
 					Player.coordinates[0] -= Player.speed*1.2
 				elif (scroll_speed == 2):
-					Player.current_frame = 8
+					Player.current_frame = 7
 					Player.coordinates[0] -= Player.speed*1.4
 				elif (scroll_speed == 3):
-					Player.current_frame = 11
+					Player.current_frame = 10
 					Player.coordinates[0] -= Player.speed*1.6
 				Player.draw(screen,rotation=0)
 		else:
