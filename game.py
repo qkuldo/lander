@@ -12,7 +12,7 @@ current_scene = GAMESCENE
 def Game():
 	slowdown_timer = 500
 	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
-	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,23,23)
+	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,17,16)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
