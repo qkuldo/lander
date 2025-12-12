@@ -18,6 +18,7 @@ def Game():
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	EnemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18)}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
+	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -140,6 +141,7 @@ def Game():
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
+		testSprite.draw(screen)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
