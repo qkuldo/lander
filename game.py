@@ -16,7 +16,7 @@ def Game():
 	slowdown_timer = 500
 	PlayerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
-	EnemyAssets = {"Warden Ship":pg.image.load("assets/images/PNG FILES/warden-enemy.png")}
+	EnemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18)}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
 	stargroup = modules.particle.StarGroup()
