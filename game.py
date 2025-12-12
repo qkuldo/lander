@@ -9,11 +9,14 @@ clock = pg.time.Clock()
 TITLESCENE = 0
 GAMESCENE = 1
 current_scene = GAMESCENE
+def loadSpritesheetFile(filepath,width,height):
+	asset = pg.image.load(filepath)
+	return modules.sheet.Spritesheet(asset,width,height)
 def Game():
 	slowdown_timer = 500
-	PlayerAsset = pg.image.load("assets/images/PNG FILES/hypership.png")
-	PlayerAsset = modules.sheet.Spritesheet(PlayerAsset,17,16)
+	PlayerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
+	EnemyAssets = {"Warden Ship":pg.image.load("assets/images/PNG FILES/warden-enemy.png")}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	running = True
 	stargroup = modules.particle.StarGroup()
