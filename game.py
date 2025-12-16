@@ -18,7 +18,8 @@ def Game():
 	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	EnemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18)}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
-	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,11,[1280/2,580],hp=20)
+	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
+	enemyTestSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20,optional_params={"turnThere":rand.randint(0,1),"oscillate":1,"switchOscillateDir":64})
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -70,6 +71,7 @@ def Game():
 					Player.coordinates[0] += Player.speed*1.4
 				elif (scroll_speed == 3):
 					Player.coordinates[0] += Player.speed*1.6
+				testSprite.current_frame = 2
 				if (scroll_speed == 0):
 					Player.current_frame = 2
 				elif (scroll_speed == 1):
@@ -81,6 +83,7 @@ def Game():
 				Player.draw(screen,rotation=0)
 			if (not moved_ltor and (keys[pg.K_LEFT] or keys[pg.K_a])):
 				moved_ltor = True
+				testSprite.current_frame = 1
 				if (scroll_speed == 0):
 					Player.current_frame = 1
 					Player.coordinates[0] -= Player.speed
@@ -95,6 +98,7 @@ def Game():
 					Player.coordinates[0] -= Player.speed*1.6
 				Player.draw(screen,rotation=0)
 		else:
+			testSprite.current_frame = 0
 			if (scroll_speed == 0):
 				Player.current_frame = 0
 			elif (scroll_speed == 1):
@@ -104,7 +108,7 @@ def Game():
 			elif (scroll_speed == 3):
 				Player.current_frame = 9
 			Player.draw(screen)
-
+		#testSprite.draw(screen)
 		if (keys[pg.K_UP] or keys[pg.K_w]):
 			if (scroll_speed == 0):
 				Player.coordinates[1] -= Player.speed
@@ -141,7 +145,27 @@ def Game():
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
-		testSprite.draw(screen)
+		turn_around = enemyTestSprite.update()
+		enemyTestSprite.optional_params["switchOscillateDir"] -= 1
+		if (enemyTestSprite.optional_params["switchOscillateDir"] <= 0):
+			enemyTestSprite.optional_params["switchOscillateDir"] = 64
+			if (enemyTestSprite.optional_params["oscillate"] == 1):
+				enemyTestSprite.optional_params["oscillate"] = 0
+			else:
+				enemyTestSprite.optional_params["oscillate"] = 1
+		if (enemyTestSprite.optional_params["oscillate"] == 1):
+			enemyTestSprite.coordinates[1] += enemyTestSprite.speed/2
+		else:
+			enemyTestSprite.coordinates[1] -= enemyTestSprite.speed/2
+		if (turn_around == 1):
+			enemyTestSprite.optional_params["turnThere"] = 1
+		elif (turn_around == 2):
+			enemyTestSprite.optional_params["turnThere"] = 0
+		if (enemyTestSprite.optional_params["turnThere"] == 1):
+			enemyTestSprite.coordinates[0] += enemyTestSprite.speed
+		else:
+			enemyTestSprite.coordinates[0] -= enemyTestSprite.speed
+		enemyTestSprite.draw(screen)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))

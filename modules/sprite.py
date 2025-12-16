@@ -18,12 +18,16 @@ class Sprite:
 		self.rect.y = self.coordinates[1]
 		if (self.rect.left < 220):
 			self.coordinates[0] += 5
+			return 1
 		if (self.rect.right > 1060):
 			self.coordinates[0] -= 5
+			return 2
 		if (self.rect.top < 0):
 			self.coordinates[1] += 5
+			return 3
 		if (self.rect.bottom > 580):
 			self.coordinates[1] -= 5
+			return 4
 	def draw(self,screen,rotation=0):
 		if (self.frame_number == 1):
 			frame = pg.transform.scale(self.spritesheet, (self.width,self.height))
@@ -55,9 +59,10 @@ class Projectile(Sprite):
 			screen.blit(pg.transform.rotate(frame,self.rotation),self.rect)
 class SpecialSprite(Sprite):
 	"""Sprite child class that has more attributes attached"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=4.5,hp=1,attack=1):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=4.5,hp=1,attack=1,optional_params={}):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.hp = hp
 		self.attack = attack
+		self.optional_params = optional_params
 
 		
