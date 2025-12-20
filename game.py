@@ -147,6 +147,8 @@ def Game():
 			scroll_speed -= 1
 		Player.update()
 		enemyTestSprite.optional_params["movementAngle"] += enemyTestSprite.speed
+		if (enemyTestSprite.optional_params["movementAngle"] > 360):
+			enemyTestSprite.optional_params["movementAngle"] = 0
 		enemyTestSprite.coordinates[0] = enemyTestSprite.optional_params["deadCenter"][0] + enemyTestSprite.optional_params["radius"] * math.cos(enemyTestSprite.optional_params["movementAngle"]/360)
 		enemyTestSprite.coordinates[1] = enemyTestSprite.optional_params["deadCenter"][1] + enemyTestSprite.optional_params["radius"] * math.sin(enemyTestSprite.optional_params["movementAngle"]/360)
 		enemyTestSprite.update()
