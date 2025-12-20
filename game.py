@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 import modules
 import random as rand
+import math
 pg.init()
 pg.mixer.init()
 screen = pg.display.set_mode((1280,720))
@@ -19,7 +20,7 @@ def Game():
 	EnemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18)}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
-	enemyTestSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20,optional_params={"turnThere":rand.randint(0,1),"oscillate":1,"switchOscillateDir":64})
+	enemyTestSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=20,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -145,26 +146,10 @@ def Game():
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
-		turn_around = enemyTestSprite.update()
-		enemyTestSprite.optional_params["switchOscillateDir"] -= 1
-		if (enemyTestSprite.optional_params["switchOscillateDir"] <= 0):
-			enemyTestSprite.optional_params["switchOscillateDir"] = 64
-			if (enemyTestSprite.optional_params["oscillate"] == 1):
-				enemyTestSprite.optional_params["oscillate"] = 0
-			else:
-				enemyTestSprite.optional_params["oscillate"] = 1
-		if (enemyTestSprite.optional_params["oscillate"] == 1):
-			enemyTestSprite.coordinates[1] += enemyTestSprite.speed/2
-		else:
-			enemyTestSprite.coordinates[1] -= enemyTestSprite.speed/2
-		if (turn_around == 1):
-			enemyTestSprite.optional_params["turnThere"] = 1
-		elif (turn_around == 2):
-			enemyTestSprite.optional_params["turnThere"] = 0
-		if (enemyTestSprite.optional_params["turnThere"] == 1):
-			enemyTestSprite.coordinates[0] += enemyTestSprite.speed
-		else:
-			enemyTestSprite.coordinates[0] -= enemyTestSprite.speed
+		enemyTestSprite.optional_params["movementAngle"] += enemyTestSprite.speed
+		enemyTestSprite.coordinates[0] = enemyTestSprite.optional_params["deadCenter"][0] + enemyTestSprite.optional_params["radius"] * math.cos(enemyTestSprite.optional_params["movementAngle"]/360)
+		enemyTestSprite.coordinates[1] = enemyTestSprite.optional_params["deadCenter"][1] + enemyTestSprite.optional_params["radius"] * math.sin(enemyTestSprite.optional_params["movementAngle"]/360)
+		enemyTestSprite.update()
 		enemyTestSprite.draw(screen)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
