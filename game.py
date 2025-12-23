@@ -18,9 +18,9 @@ def Game():
 	playerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
 	bulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
 	enemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
-	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
-	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
-	enemyTestSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=20,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
+	Player = modules.sprite.SpecialSprite(playerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
+	testSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
+	enemyTestSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=20,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -52,7 +52,7 @@ def Game():
 			starspawn = rand.randint(1,30)
 		pg.draw.rect(screen,(16,4,17),game_bg)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			player_bulletlist.append(modules.sprite.Projectile(BulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
+			player_bulletlist.append(modules.sprite.Projectile(bulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
 			player_cooldown = 30
 			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
@@ -146,11 +146,7 @@ def Game():
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
-		enemyTestSprite.optional_params["movementAngle"] += enemyTestSprite.speed
-		enemyTestSprite.coordinates[0] = enemyTestSprite.optional_params["deadCenter"][0] + enemyTestSprite.optional_params["radius"] * math.cos(enemyTestSprite.optional_params["movementAngle"]/360)
-		enemyTestSprite.coordinates[1] = enemyTestSprite.optional_params["deadCenter"][1] + enemyTestSprite.optional_params["radius"] * math.sin(enemyTestSprite.optional_params["movementAngle"]/360)
-		enemyTestSprite.update()
-		enemyTestSprite.draw(screen)
+		enemy_wardenBehavior(enemyTestSprite,screen)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
@@ -162,5 +158,12 @@ def Game():
 		clock.tick(60)
 def init():
 	Game()
+
+def enemy_wardenBehavior(enemy,screen):
+	enemy.optional_params["movementAngle"] += enemy.speed
+	enemy.coordinates[0] = enemy.optional_params["deadCenter"][0] + enemy.optional_params["radius"] * math.cos(enemy.optional_params["movementAngle"]/360)
+	enemy.coordinates[1] = enemy.optional_params["deadCenter"][1] + enemy.optional_params["radius"] * math.sin(enemy.optional_params["movementAngle"]/360)
+	enemy.update()
+	enemy.draw(screen)
 
 init()
