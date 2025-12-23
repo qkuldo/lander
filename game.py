@@ -15,9 +15,9 @@ def loadSpritesheetFile(filepath,width,height):
 	return modules.sheet.Spritesheet(asset,width,height)
 def Game():
 	slowdown_timer = 500
-	PlayerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
-	BulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
-	EnemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18)}
+	playerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
+	bulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
+	enemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
 	Player = modules.sprite.SpecialSprite(PlayerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	testSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
 	enemyTestSprite = modules.sprite.SpecialSprite(EnemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=20,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
