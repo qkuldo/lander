@@ -25,6 +25,7 @@ def Game():
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
 	player_bulletlist = []
+	enemy_bulletlist = []
 	player_cooldown = 0
 	scroll_speed = 0
 	speed_up_timer = 30
@@ -59,6 +60,12 @@ def Game():
 			dead = bullet.update()
 			if (dead):
 				player_bulletlist.remove(bullet)
+			else:
+				bullet.draw(screen)
+		for bullet in enemy_bulletlist:
+			dead = bullet.update()
+			if (dead):
+				enemy_bulletlist.remove(bullet)
 			else:
 				bullet.draw(screen)
 		if (True in left_to_right_list):
@@ -146,7 +153,7 @@ def Game():
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
 		Player.update()
-		enemy_wardenBehavior(enemyTestSprite,screen)
+		enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,enemyAssets)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
@@ -159,8 +166,13 @@ def Game():
 def init():
 	Game()
 
-def enemy_wardenBehavior(enemy,screen):
+def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 	enemy.optional_params["movementAngle"] += enemy.speed
+	end_angle = 2250
+	if (enemy.optional_params["movementAngle"] >= end_angle):
+		enemy.optional_params["movementAngle"] = 0
+	if (enemy.optional_params["movementAngle"] == 180):
+		bulletlist.append(modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midtop[0]-7,enemy.rect.midtop[1]],speed=[0,10],attack=enemy.attack))
 	enemy.coordinates[0] = enemy.optional_params["deadCenter"][0] + enemy.optional_params["radius"] * math.cos(enemy.optional_params["movementAngle"]/360)
 	enemy.coordinates[1] = enemy.optional_params["deadCenter"][1] + enemy.optional_params["radius"] * math.sin(enemy.optional_params["movementAngle"]/360)
 	enemy.update()

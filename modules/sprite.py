@@ -47,7 +47,7 @@ class Projectile(Sprite):
 		self.coordinates[1] += self.speed[1]
 		self.rect.x = self.coordinates[0]
 		self.rect.y = self.coordinates[1]
-		if (self.rect.top < 0 or self.rect.left < 220 or self.rect.right > 1060):
+		if (self.rect.top < 0 or self.rect.left < 220 or self.rect.right > 1060 or self.rect.top > 570):
 			return True
 		return False
 	def draw(self,screen):
