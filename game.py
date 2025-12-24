@@ -29,11 +29,12 @@ def Game():
 	player_cooldown = 0
 	scroll_speed = 0
 	speed_up_timer = 30
-	player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 	game_bg = pg.Rect((220,0),(840,580))
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
 	typeLegend = {"basicBullet":0}
+	debug_mode = False
 	while running:
+		player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 		moved_ltor = False
 		screen.fill("black")
 		for event in pg.event.get():
@@ -66,10 +67,14 @@ def Game():
 		for bullet in enemy_bulletlist:
 			if (typeLegend["basicBullet"] == bullet.optional_params["type"]):
 				dead = bullet.update()
-			if (dead):
+			if (pg.Rect.colliderect(bullet.rect,Player.rect)):
+				Player.hp -= bullet.attack
 				enemy_bulletlist.remove(bullet)
 			else:
-				bullet.draw(screen)
+				if (dead):
+					enemy_bulletlist.remove(bullet)
+				else:
+					bullet.draw(screen)
 		if (True in left_to_right_list):
 			if (not moved_ltor and (keys[pg.K_RIGHT] or keys[pg.K_d])):
 				moved_ltor = True
@@ -161,6 +166,8 @@ def Game():
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
 		pg.draw.line(screen,(255,255,255),(220,580),(1060,580))
 		pg.draw.rect(screen,(230,104,78),player_hp_rect)
+		if (debug_mode):
+			pg.draw.rect(screen,(255,255,255),Player.rect)
 		starspawn -= 1
 		player_cooldown -= 1
 		pg.display.flip()
