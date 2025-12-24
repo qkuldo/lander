@@ -38,10 +38,11 @@ class Sprite:
 
 class Projectile(Sprite):
 	"""Sprite child class that handles constanly moving objects"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0,attack=1):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0,attack=1,optional_params={}):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.rotation = rotation
 		self.attack = attack
+		self.optional_params = optional_params
 	def update(self):
 		self.coordinates[0] += self.speed[0]
 		self.coordinates[1] += self.speed[1]

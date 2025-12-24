@@ -32,6 +32,7 @@ def Game():
 	player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 	game_bg = pg.Rect((220,0),(840,580))
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
+	typeLegend = {"basicBullet":0}
 	while running:
 		moved_ltor = False
 		screen.fill("black")
@@ -63,7 +64,8 @@ def Game():
 			else:
 				bullet.draw(screen)
 		for bullet in enemy_bulletlist:
-			dead = bullet.update()
+			if (typeLegend["basicBullet"] == bullet.optional_params["type"]):
+				dead = bullet.update()
 			if (dead):
 				enemy_bulletlist.remove(bullet)
 			else:
@@ -172,7 +174,7 @@ def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 	if (enemy.optional_params["movementAngle"] >= end_angle):
 		enemy.optional_params["movementAngle"] = 0
 	if (enemy.optional_params["movementAngle"] == 180):
-		bulletlist.append(modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack))
+		bulletlist.append(modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack,optional_params={"type":0}))
 	enemy.coordinates[0] = enemy.optional_params["deadCenter"][0] + enemy.optional_params["radius"] * math.cos(enemy.optional_params["movementAngle"]/360)
 	enemy.coordinates[1] = enemy.optional_params["deadCenter"][1] + enemy.optional_params["radius"] * math.sin(enemy.optional_params["movementAngle"]/360)
 	enemy.update()
