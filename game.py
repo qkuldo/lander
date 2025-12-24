@@ -170,11 +170,12 @@ def init():
 
 def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 	enemy.optional_params["movementAngle"] += enemy.speed
+	bullet = modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack,optional_params={"type":0})
 	end_angle = 2250
+	if (enemy.optional_params["movementAngle"] == 180 or enemy.optional_params["movementAngle"] == 1500 or enemy.optional_params["movementAngle"] == 800 or enemy.optional_params["movementAngle"] == 1900):
+		bulletlist.append(bullet)
 	if (enemy.optional_params["movementAngle"] >= end_angle):
 		enemy.optional_params["movementAngle"] = 0
-	if (enemy.optional_params["movementAngle"] == 180):
-		bulletlist.append(modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack,optional_params={"type":0}))
 	enemy.coordinates[0] = enemy.optional_params["deadCenter"][0] + enemy.optional_params["radius"] * math.cos(enemy.optional_params["movementAngle"]/360)
 	enemy.coordinates[1] = enemy.optional_params["deadCenter"][1] + enemy.optional_params["radius"] * math.sin(enemy.optional_params["movementAngle"]/360)
 	enemy.update()
