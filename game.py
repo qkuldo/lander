@@ -172,8 +172,14 @@ def Game():
 		player_cooldown -= 1
 		pg.display.flip()
 		clock.tick(60)
+		if (Player.hp <= 0):
+			gameOver()
 def init():
 	Game()
+
+def gameOver():
+	pg.quit()
+	sys.exit()
 
 def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 	enemy.optional_params["movementAngle"] += enemy.speed
