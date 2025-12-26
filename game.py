@@ -61,7 +61,12 @@ def Game():
 			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
 			dead = bullet.update()
-			if (dead):
+			collided = bullet.rect.collidelist(enemy_list)
+			#collidelist method of Rect objects returns the index of the first Rect in the given list that has collided with the object executing the method, else returns -1
+			if (collided != -1):
+				enemy_list[collided].hp -= bullet.attack
+				player_bulletlist.remove(bullet)
+			elif (dead):
 				player_bulletlist.remove(bullet)
 			else:
 				bullet.draw(screen)
@@ -71,11 +76,10 @@ def Game():
 			if (pg.Rect.colliderect(bullet.rect,Player.rect)):
 				Player.hp -= bullet.attack
 				enemy_bulletlist.remove(bullet)
+			elif (dead):
+				enemy_bulletlist.remove(bullet)
 			else:
-				if (dead):
-					enemy_bulletlist.remove(bullet)
-				else:
-					bullet.draw(screen)
+				bullet.draw(screen)
 		if (True in left_to_right_list):
 			if (not moved_ltor and (keys[pg.K_RIGHT] or keys[pg.K_d])):
 				moved_ltor = True
@@ -163,6 +167,9 @@ def Game():
 		for enemy in enemy_list:
 			if (enemy.optional_params["type"] == 0):
 				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,enemyAssets)
+			dead = deathCheck(enemy)
+			if (dead):
+				enemy_list.remove(enemy)
 		Player.update()
 		#enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,enemyAssets)
 		stargroup.updateall(screen)
@@ -198,4 +205,9 @@ def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 	enemy.update()
 	enemy.draw(screen)
 
+def deathCheck(specialSprite):
+	if (specialSprite.hp <= 0):
+		return True
+	else:
+		return False
 init()
