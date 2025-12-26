@@ -20,7 +20,7 @@ def Game():
 	enemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
 	Player = modules.sprite.SpecialSprite(playerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
 	testSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
-	enemyTestSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=20,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
+	#enemyTestSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -33,6 +33,7 @@ def Game():
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
 	typeLegend = {"basicBullet":0}
 	debug_mode = False
+	enemy_list = [modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100,"type":0})]
 	while running:
 		player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 		moved_ltor = False
@@ -159,8 +160,11 @@ def Game():
 			scroll_speed += 1
 		if (slowdown_timer <= 0 and scroll_speed > 0):
 			scroll_speed -= 1
+		for enemy in enemy_list:
+			if (enemy.optional_params["type"] == 0):
+				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,enemyAssets)
 		Player.update()
-		enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,enemyAssets)
+		#enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,enemyAssets)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
