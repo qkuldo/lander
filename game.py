@@ -166,7 +166,7 @@ def Game():
 			scroll_speed -= 1
 		for enemy in enemy_list:
 			if (enemy.optional_params["type"] == 0):
-				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,enemyAssets)
+				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,enemyAssets,scroll_speed)
 			dead = deathCheck(enemy)
 			if (dead):
 				enemy_list.remove(enemy)
@@ -192,7 +192,7 @@ def gameOver():
 	pg.quit()
 	sys.exit()
 
-def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
+def enemy_wardenBehavior(enemy,screen,bulletlist,assets,scroll_speed):
 	enemy.optional_params["movementAngle"] += enemy.speed
 	bullet = modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack,optional_params={"type":0})
 	end_angle = 2250
@@ -200,6 +200,33 @@ def enemy_wardenBehavior(enemy,screen,bulletlist,assets):
 		bulletlist.append(bullet)
 	if (enemy.optional_params["movementAngle"] >= end_angle):
 		enemy.optional_params["movementAngle"] = 0
+	if (enemy.optional_params["movementAngle"] <= 860 or enemy.optional_params["movementAngle"] >= 1890):
+		if (scroll_speed == 0):
+			enemy.current_frame = 1
+		elif (scroll_speed == 1):
+			enemy.current_frame = 4
+		elif (scroll_speed == 2):
+			enemy.current_frame = 7
+		elif (scroll_speed == 3):
+			enemy.current_frame = 10
+	elif (enemy.optional_params["movementAngle"] >= 1050 and enemy.optional_params["movementAngle"] < 1890):
+		if (scroll_speed == 0):
+			enemy.current_frame = 2
+		elif (scroll_speed == 1):
+			enemy.current_frame = 5
+		elif (scroll_speed == 2):
+			enemy.current_frame = 8
+		elif (scroll_speed == 3):
+			enemy.current_frame = 11
+	elif (enemy.optional_params["movementAngle"] > 860 and enemy.optional_params["movementAngle"] < 1050 and enemy.optional_params["movementAngle"] < 1890):
+		if (scroll_speed == 0):
+			enemy.current_frame = 0
+		elif (scroll_speed == 1):
+			enemy.current_frame = 3
+		elif (scroll_speed == 2):
+			enemy.current_frame = 6
+		elif (scroll_speed == 3):
+			enemy.current_frame = 9
 	enemy.coordinates[0] = enemy.optional_params["deadCenter"][0] + enemy.optional_params["radius"] * math.cos(enemy.optional_params["movementAngle"]/360)
 	enemy.coordinates[1] = enemy.optional_params["deadCenter"][1] + enemy.optional_params["radius"] * math.sin(enemy.optional_params["movementAngle"]/360)
 	enemy.update()
