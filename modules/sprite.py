@@ -18,12 +18,16 @@ class Sprite:
 		self.rect.y = self.coordinates[1]
 		if (self.rect.left < 220):
 			self.coordinates[0] += 5
+			return 1
 		if (self.rect.right > 1060):
 			self.coordinates[0] -= 5
+			return 2
 		if (self.rect.top < 0):
 			self.coordinates[1] += 5
+			return 3
 		if (self.rect.bottom > 580):
 			self.coordinates[1] -= 5
+			return 4
 	def draw(self,screen,rotation=0):
 		if (self.frame_number == 1):
 			frame = pg.transform.scale(self.spritesheet, (self.width,self.height))
@@ -34,16 +38,17 @@ class Sprite:
 
 class Projectile(Sprite):
 	"""Sprite child class that handles constanly moving objects"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0,attack=1):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=[1,0],rotation=0,attack=1,optional_params={}):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.rotation = rotation
 		self.attack = attack
+		self.optional_params = optional_params
 	def update(self):
 		self.coordinates[0] += self.speed[0]
 		self.coordinates[1] += self.speed[1]
 		self.rect.x = self.coordinates[0]
 		self.rect.y = self.coordinates[1]
-		if (self.rect.top < 0 or self.rect.left < 220 or self.rect.right > 1060):
+		if (self.rect.top < 0 or self.rect.left < 220 or self.rect.right > 1060 or self.rect.top > 570):
 			return True
 		return False
 	def draw(self,screen):
@@ -55,9 +60,10 @@ class Projectile(Sprite):
 			screen.blit(pg.transform.rotate(frame,self.rotation),self.rect)
 class SpecialSprite(Sprite):
 	"""Sprite child class that has more attributes attached"""
-	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=4.5,hp=1,attack=1):
+	def __init__(self,spritesheet,width,height,frame_number=1,coordinates=[0,0],speed=4.5,hp=1,attack=1,optional_params={}):
 		super().__init__(spritesheet,width,height,frame_number,coordinates,speed)
 		self.hp = hp
 		self.attack = attack
+		self.optional_params = optional_params
 
 		
