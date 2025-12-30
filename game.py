@@ -3,24 +3,36 @@ import sys
 import modules
 import random as rand
 import math
-pg.init()
-pg.mixer.init()
-screen = pg.display.set_mode((1280,720))
-clock = pg.time.Clock()
+import copy
 TITLESCENE = 0
 GAMESCENE = 1
+SCREENSIZE = (1280,720)
 current_scene = GAMESCENE
+SPRITELOAD_AS_SPRITESHEET = 0
+SPRITELOAD_AS_SURF = 1
+PLAYERBULLETWIDTH = 16
+PLAYERBULLETHEIGHT = 24
 def loadSpritesheetFile(filepath,width,height):
 	asset = pg.image.load(filepath)
 	return modules.sheet.Spritesheet(asset,width,height)
+PLAYERASSET = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
+BULLETASSET = pg.image.load("assets/images/PNG FILES/bullet.png")
+#the 2 variables defined below are the best width and height for most sprites
+BASICWIDTH = 24*2.5
+BASICHEIGHT = 24*2.5
+Player = modules.sprite.SpecialSprite(PLAYERASSET,BASICWIDTH,BASICHEIGHT,11,[1280/2,580],hp=20)
+ENEMYASSETS = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
+typeLegend = {"basicBullet":0}
 def Game():
+	global Player
+	pg.init()
+	pg.mixer.init()
+	screen = pg.display.set_mode(SCREENSIZE)
+	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
+	clock = pg.time.Clock()
 	slowdown_timer = 500
-	playerAsset = loadSpritesheetFile("assets/images/PNG FILES/hypership.png",17,16)
-	bulletAsset = pg.image.load("assets/images/PNG FILES/bullet.png")
-	enemyAssets = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
-	Player = modules.sprite.SpecialSprite(playerAsset,24*2.5,24*2.5,11,[1280/2,580],hp=20)
-	testSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
-	#enemyTestSprite = modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
+	testSprite = modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
+	#enemyTestSprite = modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
 	running = True
 	stargroup = modules.particle.StarGroup()
 	starspawn = rand.randint(1,30)
@@ -30,18 +42,15 @@ def Game():
 	scroll_speed = 0
 	speed_up_timer = 30
 	game_bg = pg.Rect((220,0),(840,580))
-	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
-	typeLegend = {"basicBullet":0}
 	debug_mode = False
-	enemy_list = [modules.sprite.SpecialSprite(enemyAssets["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100,"type":0})]
+	enemy_list = [modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],BASICWIDTH,BASICHEIGHT,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100,"type":0})]
 	while running:
 		player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 		moved_ltor = False
 		screen.fill("black")
 		for event in pg.event.get():
 			if (event.type == pg.QUIT):
-				pg.quit()
-				sys.exit()
+				terminate()
 		keys = pg.key.get_pressed()
 		left_to_right_list = [keys[pg.K_LEFT],keys[pg.K_a],keys[pg.K_RIGHT],keys[pg.K_d]]
 		if (starspawn <= 0):
@@ -56,7 +65,7 @@ def Game():
 			starspawn = rand.randint(1,30)
 		pg.draw.rect(screen,(16,4,17),game_bg)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			player_bulletlist.append(modules.sprite.Projectile(bulletAsset,16,24,1,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
+			player_bulletlist.append(modules.sprite.Projectile(BULLETASSET,PLAYERBULLETWIDTH,PLAYERBULLETHEIGHT,SPRITELOAD_AS_SURF,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
 			player_cooldown = 30
 			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
@@ -166,12 +175,12 @@ def Game():
 			scroll_speed -= 1
 		for enemy in enemy_list:
 			if (enemy.optional_params["type"] == 0):
-				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,enemyAssets,scroll_speed)
+				enemy_wardenBehavior(enemy,screen,enemy_bulletlist,ENEMYASSETS,scroll_speed)
 			dead = deathCheck(enemy)
 			if (dead):
 				enemy_list.remove(enemy)
 		Player.update()
-		#enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,enemyAssets)
+		#enemy_wardenBehavior(enemyTestSprite,screen,enemy_bulletlist,ENEMYASSETS)
 		stargroup.updateall(screen)
 		pg.draw.line(screen,(255,255,255),(220,580),(220,0))
 		pg.draw.line(screen,(255,255,255),(1060,580),(1060,0))
@@ -184,11 +193,11 @@ def Game():
 		pg.display.flip()
 		clock.tick(60)
 		if (Player.hp <= 0):
-			gameOver()
+			terminate()
 def init():
 	Game()
 
-def gameOver():
+def terminate():
 	pg.quit()
 	sys.exit()
 
