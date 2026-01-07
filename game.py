@@ -20,7 +20,7 @@ BULLETASSET = pg.image.load("assets/images/PNG FILES/bullet.png")
 #the 2 variables defined below are the best width and height for most sprites
 BASICWIDTH = 24*2.5
 BASICHEIGHT = 24*2.5
-Player = modules.sprite.SpecialSprite(PLAYERASSET,BASICWIDTH,BASICHEIGHT,11,[1280/2,580],hp=20)
+Player = modules.sprite.SpecialSprite(PLAYERASSET,BASICWIDTH,BASICHEIGHT,11,[1280/2,580,0],hp=20)
 ENEMYASSETS = {"Warden Ship":loadSpritesheetFile("assets/images/PNG FILES/warden-enemy.png",17,18),"bullet":pg.image.load("assets/images/PNG FILES/enemyFlying-bullet.png")}
 typeLegend = {"basicBullet":0}
 def Game():
@@ -31,7 +31,7 @@ def Game():
 	SFX = {"playerShoot":pg.mixer.Sound("assets/sfx/playerShoot.wav")}
 	clock = pg.time.Clock()
 	slowdown_timer = 500
-	testSprite = modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0],hp=20)
+	testSprite = modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],24*2.5,24*2.5,0,[1280/2,0,0],hp=20)
 	#enemyTestSprite = modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],24*2.5,24*2.5,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100})
 	running = True
 	stargroup = modules.particle.StarGroup()
@@ -43,7 +43,7 @@ def Game():
 	speed_up_timer = 30
 	game_bg = pg.Rect((220,0),(840,580))
 	debug_mode = False
-	enemy_list = [modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],BASICWIDTH,BASICHEIGHT,0,[0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100,"type":0})]
+	enemy_list = [modules.sprite.SpecialSprite(ENEMYASSETS["Warden Ship"],BASICWIDTH,BASICHEIGHT,0,[0,0,0],speed=20,hp=5,optional_params={"deadCenter":[1280/2,90],"movementAngle":0,"radius":100,"type":0})]
 	while running:
 		player_hp_rect = pg.Rect((200,580-Player.hp*10),(15,Player.hp*10))
 		moved_ltor = False
@@ -65,7 +65,7 @@ def Game():
 			starspawn = rand.randint(1,30)
 		pg.draw.rect(screen,(16,4,17),game_bg)
 		if (keys[pg.K_SPACE] and player_cooldown <= 0):
-			player_bulletlist.append(modules.sprite.Projectile(BULLETASSET,PLAYERBULLETWIDTH,PLAYERBULLETHEIGHT,SPRITELOAD_AS_SURF,[Player.rect.midtop[0]-7,Player.rect.midtop[1]],speed=[0,-10],attack=Player.attack))
+			player_bulletlist.append(modules.sprite.Projectile(BULLETASSET,PLAYERBULLETWIDTH,PLAYERBULLETHEIGHT,SPRITELOAD_AS_SURF,[Player.rect.midtop[0]-7,Player.rect.midtop[1],Player.coordinates[2]],speed=[0,-10],attack=Player.attack))
 			player_cooldown = 30
 			SFX["playerShoot"].play()
 		for bullet in player_bulletlist:
@@ -128,10 +128,14 @@ def Game():
 				Player.current_frame = 9
 			Player.draw(screen)
 		#testSprite.draw(screen)
-		if (keys[pg.K_UP] or keys[pg.K_w]):
+		if ((keys[pg.K_UP] or keys[pg.K_w]) and not ((keys[pg.K_DOWN] or keys[pg.K_s]) or keys[pg.K_LCTRL])):
 			Player.coordinates[1] -= Player.speed
-		if (keys[pg.K_DOWN] or keys[pg.K_s]):
+		elif ((keys[pg.K_DOWN] or keys[pg.K_s]) and not ((keys[pg.K_UP] or keys[pg.K_w]) or keys[pg.K_LCTRL])):
 			Player.coordinates[1] += Player.speed
+		elif (((keys[pg.K_DOWN] or keys[pg.K_s]) and Player.coordinates[2] > 0 and keys[pg.K_LCTRL]) and not (keys[pg.K_UP] or keys[pg.K_w])):
+			Player.coordinates[2] -= 1
+		elif (((keys[pg.K_UP] or keys[pg.K_w]) and keys[pg.K_LCTRL]) and not (keys[pg.K_DOWN] or keys[pg.K_s])):
+			Player.coordinates[2] += 1
 		if ((keys[pg.K_RSHIFT] or keys[pg.K_LSHIFT]) and scroll_speed < 3):
 			speed_up_timer -= 0.1
 			if (slowdown_timer < 500):
@@ -178,7 +182,7 @@ def terminate():
 
 def enemy_wardenBehavior(enemy,screen,bulletlist,assets,scroll_speed):
 	enemy.optional_params["movementAngle"] += enemy.speed
-	bullet = modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1]],speed=[0,10],attack=enemy.attack,optional_params={"type":0})
+	bullet = modules.sprite.Projectile(assets["bullet"],16,24,1,[enemy.rect.midbottom[0]-7,enemy.rect.midbottom[1],enemy.coordinates[2]],speed=[0,10],attack=enemy.attack,optional_params={"type":0})
 	end_angle = 2250
 	if (enemy.optional_params["movementAngle"] == 800 or enemy.optional_params["movementAngle"] == 1900 or enemy.optional_params["movementAngle"] == 180):
 		bulletlist.append(bullet)
